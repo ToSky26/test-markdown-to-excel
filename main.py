@@ -1,7 +1,7 @@
 import argparse
 from pathlib import Path
 
-from parser import parse_tests, find_numbers
+from parser import parse_tests, find_numbers, extract_questions
 
 
 def main():
@@ -18,9 +18,17 @@ def main():
     text = input_path.read_text(encoding='utf-8-sig')
     parse_tests(text)
     find_numbers(text)
+    questions = extract_questions(text)
     print(f'Файл прочитан: {input_path}')
     print(f'Количество символов: {len(text)}')
+    print(f'Извлечено вопросов: {len(questions)}')
+
+    for question in questions:
+        print(
+            f'{question["part"]} | {question["number"]}: '
+            f'{question["question"][:100]}'
+        )
 
 
-if __name__ == "__main__":
+if __name__ == '__main__':
     main()
