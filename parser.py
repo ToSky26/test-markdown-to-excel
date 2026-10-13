@@ -36,6 +36,7 @@ def extract_questions(text):
             end = len(text)
 
         question_text = text[start:end].strip()
+        images = re.findall(r'!\[[^\]]*\]\((https?://[^)\s]+)\)', question_text)
 
         part_number = ''
 
@@ -49,6 +50,7 @@ def extract_questions(text):
             'part': f'ЧАСТЬ {part_number}' if part_number else '',
             'number': match.group(1),
             'question': question_text,
+            'images': images,
         })
 
     return questions

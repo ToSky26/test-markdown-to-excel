@@ -28,6 +28,7 @@ def main():
             f'{question["part"]} | {question["number"]}: '
             f'{question["question"][:100]}'
         )
+        print(f'Ссылки на рисунки: {question["images"]}')
 
 
 if __name__ == '__main__':
