@@ -37,6 +37,9 @@ def extract_questions(text):
 
         question_text = text[start:end].strip()
         images = re.findall(r'!\[[^\]]*\]\((https?://[^)\s]+)\)', question_text)
+        question_text = re.sub(r'!\[[^\]]*\]\([^)]+\)', '', question_text)
+        question_text = re.sub(r'(?mi)^\s*Рис\.\s*\d+\.?\s*$', '', question_text)
+        question_text = re.sub(r'\n\s*\n+', '\n', question_text).strip()
 
         part_number = ''
 
