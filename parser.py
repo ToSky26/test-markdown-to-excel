@@ -1,26 +1,6 @@
 import re
 
 
-def parse_tests(text):
-    pattern = r'\\(?:title|section\*?)\s*\{[^}]*ЧАСТЬ\s*(\d+)[^}]*\}'
-    matches = re.findall(pattern, text, re.IGNORECASE)
-
-    print(f'Найдено частей: {len(matches)}')
-
-    for number in matches:
-        print(f'ЧАСТЬ {number}')
-
-
-def find_numbers(text):
-    pattern = r'(?m)^\s*([ВBСC]\d+)\s+'
-    matches = re.findall(pattern, text)
-
-    print(f'Найдено вопросов: {len(matches)}')
-
-    for number in matches:
-        print(number)
-
-
 def extract_questions(text):
     question_pattern = r'(?m)^\s*([ВBСC]\d+)\s+'
     matches = list(re.finditer(question_pattern, text))
@@ -36,10 +16,22 @@ def extract_questions(text):
             end = len(text)
 
         question_text = text[start:end].strip()
-        images = re.findall(r'!\[[^\]]*\]\((https?://[^)\s]+)\)', question_text)
+        images = re.findall(
+            r'!\[[^\]]*\]\((https?://[^)\s]+)\)', question_text
+        )
         question_text = re.sub(r'!\[[^\]]*\]\([^)]+\)', '', question_text)
-        question_text = re.sub(r'(?mi)^\s*Рис\.\s*\d+\.?\s*$', '', question_text)
-        question_text = re.sub(r'\n\s*\n+', '\n', question_text).strip()
+        question_text = re.sub(
+            r'(?m)^[ \t]*Рис\.\s*\d+\.?[ \t]*$',
+            lambda match: (
+                '\n\nРис. ' + re.search(r'\d+', match.group()).group() + '\n\n'
+            ), question_text)
+        question_text = re.sub(
+            r'\n[ \t]*\n[ \t]*\n+', '\n\n\n', question_text
+        ).strip()
+        question_text = re.sub(
+            r'\\(?:title|section\*?)\s*\{[^}]*ЧАСТЬ\s*\d+[^}]*\}', '',
+            question_text, flags=re.IGNORECASE,
+        ).strip()
 
         part_number = ''
 
@@ -57,4 +49,3 @@ def extract_questions(text):
         })
 
     return questions
-

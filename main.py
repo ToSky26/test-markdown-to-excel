@@ -1,7 +1,7 @@
 import argparse
 from pathlib import Path
 
-from parser import parse_tests, find_numbers, extract_questions
+from parser import extract_questions
 from excel_export import export_to_excel
 
 
@@ -17,21 +17,9 @@ def main():
         return
 
     text = input_path.read_text(encoding='utf-8-sig')
-    parse_tests(text)
-    find_numbers(text)
     questions = extract_questions(text)
     export_to_excel(questions, args.output)
-    print(f'Excel-файл сохранён: {args.output}')
-    print(f'Файл прочитан: {input_path}')
-    print(f'Количество символов: {len(text)}')
-    print(f'Извлечено вопросов: {len(questions)}')
-
-    for question in questions:
-        print(
-            f'{question["part"]} | {question["number"]}: '
-            f'{question["question"][:100]}'
-        )
-        print(f'Ссылки на рисунки: {question["images"]}')
+    print(f'Файл создан: {args.output}')
 
 
 if __name__ == '__main__':
