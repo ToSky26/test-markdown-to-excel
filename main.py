@@ -2,6 +2,7 @@ import argparse
 from pathlib import Path
 
 from parser import parse_tests, find_numbers, extract_questions
+from excel_export import export_to_excel
 
 
 def main():
@@ -19,6 +20,8 @@ def main():
     parse_tests(text)
     find_numbers(text)
     questions = extract_questions(text)
+    export_to_excel(questions, args.output)
+    print(f'Excel-файл сохранён: {args.output}')
     print(f'Файл прочитан: {input_path}')
     print(f'Количество символов: {len(text)}')
     print(f'Извлечено вопросов: {len(questions)}')
