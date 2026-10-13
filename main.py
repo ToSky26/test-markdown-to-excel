@@ -1,6 +1,8 @@
 import argparse
 from pathlib import Path
 
+from parser import parse_tests, find_numbers
+
 
 def main():
     parser = argparse.ArgumentParser()
@@ -14,6 +16,8 @@ def main():
         return
 
     text = input_path.read_text(encoding='utf-8-sig')
+    parse_tests(text)
+    find_numbers(text)
     print(f'Файл прочитан: {input_path}')
     print(f'Количество символов: {len(text)}')
 
